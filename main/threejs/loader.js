@@ -132,15 +132,15 @@ game.threejs.Loader.prototype.loadTexture = (name, url) => {
     url,
     game.NONE,
     () => {
-      self.updateState("textures", name, true);
+      this.updateState("textures", name, true);
     },
     () => {
-      self.errorCallback.call(self, name);
+      this.errorCallback.call(this, name);
     }
   );
 }
 
-game.threejs.Loader.prototype.loadTextureCube = (name, url) {
+game.threejs.Loader.prototype.loadTextureCube = (name, url) => {
   let urls = [
     url.replace("%1", "px"), url.replace("%1", "nx"),
     url.replace("%1", "py"), url.replace("%1", "ny"),
@@ -170,9 +170,24 @@ game.threejs.Loader.prototype.loadGeometry = (name, url) => {
 }
 
 game.threejs.Loader.prototype.loadAnalyser = (name, url) => {
-  
+  this.updateState("analysers", name, false);
+  this.data.analysers[name] = new game.ImageData(
+    url,
+    () => {
+      this.updateState("analysers", name, true);
+    }
+  );
 }
 
-game.threejs.Loader.prototype.loadImage = (name, url) {
-
+game.threejs.Loader.prototype.loadImage = (name, url) => {
+  this.updateState("images", name, false);
+  let newImg = new Image();
+  newImg.onload = () => {
+    this.updateState("images", name, true);
+  };
+  newImg.crossOrigin = "anonymous";
+  newImg.src = url;
+  this.data.images[name] = newImg;
 }
+
+// maybe sound loader
