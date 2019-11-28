@@ -66,5 +66,13 @@ game.threejs.Particales.prototype.build = () => {
 
 game.threejs.Particles.prototype.emit = (count) => {
   let emitable = Math.min(count, this.pool.length);
-  
+  for (let i = 0; i < emitable; i++) {
+    let pop = this.pool.pop();
+    pop.available = false;
+    pop.position.copy(this.spaw)
+      .addSelf(
+        this.randomVector()
+        .multiplySelf(this.spawnRadius)
+      );
+  }
 }
