@@ -14,6 +14,8 @@ pepetrack.game.tracks = {
   },
 
   spawn: {
-    x: 
+    x: -1134 * 2,
+    y: 387,
+    z: -443 * 2
   }
 }
