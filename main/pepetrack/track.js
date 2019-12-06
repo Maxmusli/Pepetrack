@@ -68,5 +68,41 @@ pepetrack.game.tracks = {
       metal: true,
       perPixel: false
     });
+  },
+
+  buildScenes: (context) => {
+    this.analyser = this.lib.get("analysers", "track.collision");
+    // sky box
+    let sceneCube = new THREE.Scene();
+
+    let cameraCube = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 6000);
+    sceneCube.add(cameraCube);
+
+    let skyshader = THREE.ShaderUtils.lib["cube"];
+    skyshader.uniforms["tCube"].texture = this.lib.get("texturesCube", "skybox.dawnclouds");
+
+    let skymaterial = new THREE.ShaderMaterial(
+      {
+        fragmentShader: skyshader.fragmentShader,
+        vertexShader: skyshader.vertexShader,
+        uniforms: skyshader.uniforms,
+        depthWrite: false
+      });
+
+    let mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skymaterial);
+    mesh.flipSided = true;
+
+    sceneCube.add(mesh);
+
+    ctx.manager.add("sky", sceneCube, cameraCube);
+
+    let ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
+
+    let camera = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 60000);
+
+    let scene = new THREE.Scene();
+    scene.add(camera);
+    scene.add(new THREE.AmbientLight(ambient));
+
   }
 }
