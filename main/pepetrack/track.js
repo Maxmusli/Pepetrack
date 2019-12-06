@@ -25,7 +25,7 @@ pepetrack.game.tracks = {
     z: 0
   },
   
-  load: function(opts) {
+  load: (opts) => {
     this.lib = new pepetrack.threejs.Loader();
 
     this.lib.load({
@@ -42,7 +42,31 @@ pepetrack.game.tracks = {
         'track.cityscape.start': "geometries/tracks/cityscape/start.json",
         'track.cityscape.start.banner': "geometries/tracks/cityscape/startbanner.json",
         'track.cityscape.bonus.speed': "geometries/tracks/cityscape/bonus/speed.json"
-      }
+      },
+      analysers: {
+        'track.cityscape.collision': "textures/tracks/collision.png",
+        'track.cityscape.height': "textures/tracks/height.png"
+      },
     })
+  },
+
+  buildMaterials: () => {
+    this.materials.track = bkcore.Utils.createNormalMaterial({
+      diffuse: this.lib.get("textures", "track.diffuse"),
+      specular: this.lib.get("textures", "track.specular"),
+      normal: this.lib.get("textures", "track.normal"),
+      ambient: 0xffffff,
+      shininess: 42,
+      metal: true,
+      perPixel: true
+    });
+
+    this.materials.ship = bkcore.Utils.createNormalMaterial({
+      diffuse: this.lib.get("textures", "ship.feisar.diffuse"), // change to car 
+      ambient: 0x444444,
+      shininess: 42,
+      metal: true,
+      perPixel: false
+    });
   }
 }
